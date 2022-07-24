@@ -3,18 +3,38 @@
 
 import * as React from 'react'
 
-function Greeting({initialName = ''}) {
-  // 🐨 initialize the state to the value from localStorage
-  // 💰 window.localStorage.getItem('name') ?? initialName
-  const [name, setName] = React.useState(initialName)
+function useLocalStorageStateHook(
+  defaultValue = '',
+  key,
+  {serialize = JSON.stringify, deserialize = JSON.parse} = {},
+) {
+  const [state, setState] = React.useState(() => {
+    const value = window.localStorage.getItem(key)
+    if (value) {
+      return deserialize(value)
+    }
+    return defaultValue
+  })
+  const prevKey = React.useRef(key)
+  React.useEffect(() => {
+    const prevKeyValue = prevKey.current
+    if (prevKeyValue !== key) {
+      localStorage.removeItem(prevKeyValue)
+    }
+    prevKey.current = key
+    window.localStorage.setItem(key, serialize(state))
+  }, [key, serialize, state])
 
-  // 🐨 Here's where you'll use `React.useEffect`.
-  // The callback should set the `name` in localStorage.
-  // 💰 window.localStorage.setItem('name', name)
+  return [state, setState]
+}
+
+function Greeting({initialName}) {
+  const [name, setName] = useLocalStorageStateHook(initialName, 'gays')
 
   function handleChange(event) {
     setName(event.target.value)
   }
+
   return (
     <div>
       <form>
@@ -27,7 +47,7 @@ function Greeting({initialName = ''}) {
 }
 
 function App() {
-  return <Greeting />
+  return <Greeting initialName={''} />
 }
 
 export default App
