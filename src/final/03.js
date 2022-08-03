@@ -4,6 +4,7 @@
 import * as React from 'react'
 
 function Name({name, onNameChange}) {
+  console.log('name rendered')
   return (
     <div>
       <label htmlFor="name">Name: </label>
@@ -26,6 +27,7 @@ function Display({name, animal}) {
 }
 
 function App() {
+  console.log('app rendered')
   const [animal, setAnimal] = React.useState('')
   const [name, setName] = React.useState('')
   return (

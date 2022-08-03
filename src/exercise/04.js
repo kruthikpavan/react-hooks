@@ -79,6 +79,15 @@ function Game() {
       return null
     }
 
+    const squares = [...currentSquares]
+
+    squares[square] = nextValue
+
+    const historyCopy = [...history]
+    historyCopy.push(squares)
+    setHistory(historyCopy)
+    setCurrentStep(history.length)
+
     const newHistory = history.slice(0, currentStep + 1)
     const squares = [...currentSquares]
 
