@@ -89,7 +89,7 @@ function Game() {
     setCurrentStep(history.length)
 
     const newHistory = history.slice(0, currentStep + 1)
-    const squares = [...currentSquares]
+
 
     squares[square] = nextValue
     setHistory([...newHistory, squares])
